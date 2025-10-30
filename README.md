@@ -1,2 +1,248 @@
-# Spixyfy-music
-music player for all songs you love
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spotify Clone</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(180deg, #121212, #000000);
+      color: white;
+      overflow-x: hidden;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 10px 30px;
+      background-color: #1db954;
+      height: 60px;
+    }
+
+    header h1 {
+      font-size: 22px;
+      margin: 0;
+      color: white;
+      letter-spacing: 1px;
+    }
+
+    .song-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 30px;
+    }
+
+    .song {
+      background-color: #181818;
+      border-radius: 12px;
+      padding: 15px;
+      text-align: center;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .song:hover {
+      transform: scale(1.05);
+      background-color: #222222;
+    }
+
+    .song img {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    .song h3 {
+      font-size: 16px;
+      margin-top: 10px;
+      color: #fff;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #181818;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+    }
+
+    .controls button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 22px;
+      margin: 0 10px;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .controls button:hover {
+      color: #1db954;
+    }
+
+    .progress-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      margin: 0 20px;
+    }
+
+    .progress-container input[type="range"] {
+      width: 100%;
+    }
+
+    .volume-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .now-playing {
+      position: fixed;
+      bottom: 70px;
+      left: 20px;
+      font-size: 14px;
+      color: #1db954;
+      font-weight: 500;
+    }
+
+    @media (max-width: 600px) {
+      .song-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Spotify</h1>
+  </header>
+
+  <div class="song-container">
+    <div class="song" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+      <img src="https://picsum.photos/200?1" alt="song1">
+      <h3>Calm Vibes</h3>
+    </div>
+    <div class="song" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">
+      <img src="https://picsum.photos/200?2" alt="song2">
+      <h3>Sunset Drive</h3>
+    </div>
+    <div class="song" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">
+      <img src="https://picsum.photos/200?3" alt="song3">
+      <h3>Chill Beats</h3>
+    </div>
+    <div class="song" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3">
+      <img src="https://picsum.photos/200?4" alt="song4">
+      <h3>Night Rider</h3>
+    </div>
+    <div class="song" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3">
+      <img src="https://picsum.photos/200?5" alt="song5">
+      <h3>Dream Escape</h3>
+    </div>
+    <div class="song" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3">
+      <img src="https://picsum.photos/200?6" alt="song6">
+      <h3>Rainy Mood</h3>
+    </div>
+    <div class="song" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3">
+      <img src="https://picsum.photos/200?7" alt="song7">
+      <h3>Ocean Waves</h3>
+    </div>
+    <div class="song" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3">
+      <img src="https://picsum.photos/200?8" alt="song8">
+      <h3>Good Energy</h3>
+    </div>
+  </div>
+
+  <div class="now-playing">Now Playing: None</div>
+
+  <footer>
+    <div class="controls">
+      <button id="prev">⏮</button>
+      <button id="play">▶</button>
+      <button id="next">⏭</button>
+    </div>
+
+    <div class="progress-container">
+      <input type="range" id="progress" value="0" min="0" max="100">
+    </div>
+
+    <div class="volume-control">
+      <input type="range" id="volume" min="0" max="100" value="50">
+      <span id="volume-value">50%</span>
+    </div>
+
+    <audio id="audio"></audio>
+  </footer>
+
+  <script>
+    const audio = document.getElementById('audio');
+    const playBtn = document.getElementById('play');
+    const nextBtn = document.getElementById('next');
+    const prevBtn = document.getElementById('prev');
+    const progress = document.getElementById('progress');
+    const volume = document.getElementById('volume');
+    const volumeValue = document.getElementById('volume-value');
+    const nowPlaying = document.querySelector('.now-playing');
+    const songs = Array.from(document.querySelectorAll('.song'));
+
+    let currentSongIndex = 0;
+
+    songs.forEach((song, index) => {
+      song.addEventListener('click', () => {
+        currentSongIndex = index;
+        playSong(song);
+      });
+    });
+
+    function playSong(song) {
+      audio.src = song.getAttribute('data-src');
+      audio.play();
+      playBtn.textContent = '⏸';
+      nowPlaying.textContent = 'Now Playing: ' + song.querySelector('h3').textContent;
+    }
+
+    playBtn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+        playBtn.textContent = '⏸';
+      } else {
+        audio.pause();
+        playBtn.textContent = '▶';
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      currentSongIndex = (currentSongIndex + 1) % songs.length;
+      playSong(songs[currentSongIndex]);
+    });
+
+    prevBtn.addEventListener('click', () => {
+      currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+      playSong(songs[currentSongIndex]);
+    });
+
+    audio.addEventListener('timeupdate', () => {
+      const progressValue = (audio.currentTime / audio.duration) * 100;
+      progress.value = progressValue || 0;
+    });
+
+    progress.addEventListener('input', () => {
+      audio.currentTime = (progress.value / 100) * audio.duration;
+    });
+
+    volume.addEventListener('input', () => {
+      audio.volume = volume.value / 100;
+      volumeValue.textContent = volume.value + '%';
+    });
+  </script>
+</body>
+</html>
+
