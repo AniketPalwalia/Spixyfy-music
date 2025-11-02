@@ -3,13 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spixyfy Music</title>
+  <title>Spitify Music</title>
   <style>
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
       background-color: #000;
       color: #fff;
+      animation: fadeIn 1.2s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     header {
@@ -18,157 +24,171 @@
       align-items: center;
       padding: 20px;
       background-color: #111;
+      box-shadow: 0 2px 8px rgba(255, 0, 127, 0.3);
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
     header h1 {
       color: #ff007f;
-      font-size: 24px;
+      font-size: 26px;
       margin: 0;
+      letter-spacing: 1px;
     }
 
     .premium-banner {
       background-color: #ff007f;
       color: white;
       text-align: center;
-      padding: 10px;
+      padding: 12px;
       font-weight: bold;
-      display: none;
+      transform: translateY(-100%);
+      transition: transform 0.5s ease-in-out;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 100;
+    }
+
+    .premium-banner.show {
+      transform: translateY(0);
     }
 
     .container {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
-      padding: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 25px;
+      padding: 30px;
     }
 
     .song {
       background-color: #1a1a1a;
-      border-radius: 12px;
+      border-radius: 15px;
       text-align: center;
       padding: 15px;
-      box-shadow: 0 4px 8px rgba(255, 0, 127, 0.3);
+      box-shadow: 0 4px 12px rgba(255, 0, 127, 0.25);
+      transition: transform 0.3s, box-shadow 0.3s;
     }
 
-    .song img {
+    .song:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(255, 0, 127, 0.5);
+    }
+
+    .song iframe {
       width: 100%;
+      height: 166px;
       border-radius: 10px;
     }
 
     .song h3 {
       margin: 10px 0 5px;
       color: #ff66b2;
+      font-size: 18px;
     }
 
-    .player {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
+    footer {
+      text-align: center;
+      padding: 20px;
       background: #111;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 15px;
+      color: #ff66b2;
+      font-weight: bold;
+      letter-spacing: 1px;
+      box-shadow: 0 -2px 8px rgba(255, 0, 127, 0.3);
     }
 
-    .controls button {
-      background: #ff007f;
-      border: none;
-      color: white;
-      padding: 10px;
-      border-radius: 50%;
-      cursor: pointer;
-    }
-
-    .volume input {
-      width: 100px;
-    }
-
-    .volume span {
-      margin-left: 10px;
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 20px;
+      }
+      .song iframe {
+        height: 150px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="premium-banner" id="premiumBanner">💖 Get Spixyfy Premium for just ₹5! Offer ends soon! 💖</div>
+  <div class="premium-banner" id="premiumBanner">💖 Get Spitify Premium for just ₹5! Offer ends soon! 💖</div>
+
   <header>
-    <h1>Spixyfy</h1>
+    <h1>Spitify</h1>
   </header>
 
   <div class="container">
-    <div class="song"><img src="https://i.ibb.co/gjzJdrL/letmeloveyou.jpg" alt="Let Me Love You"><h3>Let Me Love You</h3></div>
-    <div class="song"><img src="https://i.ibb.co/y0LxjZ3/friends.jpg" alt="Friends"><h3>Friends</h3></div>
-    <div class="song"><img src="https://i.ibb.co/3WzQMLW/judas.jpg" alt="Judas"><h3>Judas</h3></div>
-    <div class="song"><img src="https://i.ibb.co/nRz0znf/pokerface.jpg" alt="Poker Face"><h3>Poker Face</h3></div>
-    <div class="song"><img src="https://i.ibb.co/wCpNpvb/blindinglights.jpg" alt="Blinding Lights"><h3>Blinding Lights</h3></div>
-    <div class="song"><img src="https://i.ibb.co/xmRLc4n/shapeofyou.jpg" alt="Shape of You"><h3>Shape of You</h3></div>
-    <div class="song"><img src="https://i.ibb.co/YfYdH3Y/stay.jpg" alt="Stay"><h3>Stay</h3></div>
-    <div class="song"><img src="https://i.ibb.co/9tgYVQ1/levitating.jpg" alt="Levitating"><h3>Levitating</h3></div>
+    <div class="song">
+      <h3>Let Me Love You (Remix)</h3>
+      <iframe scrolling="no" frameborder="no" allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/r3hab/dj-snake-justin-bieber-let-me-love-you-r3hab-remix&color=%23ff007f&auto_play=false">
+      </iframe>
+    </div>
+
+    <div class="song">
+      <h3>Judas (Slowed + Reverb)</h3>
+      <iframe scrolling="no" frameborder="no" allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/renankor/lady-gaga-judas-tiktok-music-trend-slowed-reverb&color=%23ff007f&auto_play=false">
+      </iframe>
+    </div>
+
+    <div class="song">
+      <h3>Friends - Marshmello & Anne-Marie</h3>
+      <iframe scrolling="no" frameborder="no" allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/marshmellomusic/friends&color=%23ff007f&auto_play=false">
+      </iframe>
+    </div>
+
+    <div class="song">
+      <h3>Poker Face (Sped Up)</h3>
+      <iframe scrolling="no" frameborder="no" allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/aushane-crown/poker-face-sped-up-lady-gaga&color=%23ff007f&auto_play=false">
+      </iframe>
+    </div>
+
+    <div class="song">
+      <h3>Unforgettable Freestyle</h3>
+      <iframe scrolling="no" frameborder="no" allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/pnbrock/unforgettable-freestyle&color=%23ff007f&auto_play=false">
+      </iframe>
+    </div>
+
+    <div class="song">
+      <h3>Rose - Bruno Mars</h3>
+      <iframe scrolling="no" frameborder="no" allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/iwpt6naurllx/rose-bruno-mars-apt-12&color=%23ff007f&auto_play=false">
+      </iframe>
+    </div>
+
+    <div class="song">
+      <h3>Espresso - Sabrina Carpenter</h3>
+      <iframe scrolling="no" frameborder="no" allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/music200/espresso-sabrina-carpenter&color=%23ff007f&auto_play=false">
+      </iframe>
+    </div>
+
+    <div class="song">
+      <h3>Naja - Pav Dharia</h3>
+      <iframe scrolling="no" frameborder="no" allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/pavdharia/naja&color=%23ff007f&auto_play=false">
+      </iframe>
+    </div>
+
+    <div class="song">
+      <h3>3 Peg - Sharry Mann</h3>
+      <iframe scrolling="no" frameborder="no" allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/rajvir-kunga/3-peg-sharry-mann-1&color=%23ff007f&auto_play=false">
+      </iframe>
+    </div>
   </div>
 
-  <div class="player">
-    <div class="now-playing">🎵 Now Playing: <span id="currentSong">Let Me Love You</span></div>
-    <div class="controls">
-      <button onclick="prevSong()">⏮</button>
-      <button onclick="togglePlay()">▶️</button>
-      <button onclick="nextSong()">⏭</button>
-    </div>
-    <div class="volume">
-      🔊 <input type="range" id="volume" min="0" max="100" value="50" onchange="updateVolume()"> <span id="volValue">50</span>
-    </div>
-  </div>
+  <footer>🎶 Enjoy your music on Spitify 💖</footer>
 
   <script>
     const banner = document.getElementById('premiumBanner');
-    banner.style.display = 'block';
+    banner.classList.add('show');
     setTimeout(() => {
-      banner.style.display = 'none';
+      banner.classList.remove('show');
     }, 5000);
-
-    // Free public domain MP3 sources
-    const songs = [
-      { title: 'Let Me Love You', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Kevin_MacLeod/Jazz_Sampler/Kevin_MacLeod_-_01_-_Take_the_Lead.mp3' },
-      { title: 'Friends', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Scott_Holmes_Music/Happy_Music/Scott_Holmes_Music_-_01_-_Happy_Ukulele.mp3' },
-      { title: 'Judas', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Silence_Is_Sexy/Silence_Is_Sexy_-_Live_in_Berlin/Silence_Is_Sexy_-_02_-_Holiday.mp3' },
-      { title: 'Poker Face', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Mid-Air_Machine/So_We_Go/Mid-Air_Machine_-_04_-_Blue_Skies.mp3' },
-      { title: 'Blinding Lights', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Jahzzar/HiFi_City/Jahzzar_-_01_-_Siesta.mp3' },
-      { title: 'Shape of You', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Komiku/It_is_time_for_adventure/Komiku_-_07_-_Battle_of_Pogs.mp3' },
-      { title: 'Stay', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Komiku/Poupis_theme/Komiku_-_06_-_Poupis_Theme.mp3' },
-      { title: 'Levitating', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Komiku/Quest_of_the_dreams/Komiku_-_01_-_Friends.mp3' }
-    ];
-
-    let current = 0;
-    const audio = new Audio(songs[current].src);
-
-    function togglePlay() {
-      if (audio.paused) {
-        audio.play();
-        document.getElementById('currentSong').textContent = songs[current].title;
-      } else {
-        audio.pause();
-      }
-    }
-
-    function nextSong() {
-      current = (current + 1) % songs.length;
-      audio.src = songs[current].src;
-      audio.play();
-      document.getElementById('currentSong').textContent = songs[current].title;
-    }
-
-    function prevSong() {
-      current = (current - 1 + songs.length) % songs.length;
-      audio.src = songs[current].src;
-      audio.play();
-      document.getElementById('currentSong').textContent = songs[current].title;
-    }
-
-    function updateVolume() {
-      const volume = document.getElementById('volume').value;
-      audio.volume = volume / 100;
-      document.getElementById('volValue').textContent = volume;
-    }
   </script>
 </body>
 </html>
