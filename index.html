@@ -1,262 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Spitify - Music Player</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #121212;
-    color: white;
-    margin: 0;
-    padding: 0;
-  }
-
-  /* Banner */
-  .banner {
-    background-color: #ff4da6;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    font-weight: bold;
-    animation: fadeOut 1s ease-in-out 5s forwards;
-  }
-
-  @keyframes fadeOut {
-    to {
-      opacity: 0;
-      visibility: hidden;
-      height: 0;
-      padding: 0;
-    }
-  }
-
-  /* Header */
-  header {
-    background-color: #ff4da6;
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  header h1 {
-    margin: 0;
-    font-size: 24px;
-  }
-
-  /* Song List */
-  .song-list {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    padding: 20px;
-  }
-
-  .song {
-    background-color: #1e1e1e;
-    border-radius: 12px;
-    text-align: center;
-    padding: 10px;
-    transition: transform 0.3s;
-  }
-
-  .song:hover {
-    transform: scale(1.05);
-    background-color: #292929;
-  }
-
-  .song img {
-    width: 100%;
-    border-radius: 10px;
-  }
-
-  .song h3 {
-    margin: 10px 0 5px;
-    font-size: 16px;
-  }
-
-  /* Player */
-  .player {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #181818;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .controls {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
-
-  button {
-    background-color: transparent;
-    border: none;
-    color: white;
-    font-size: 20px;
-    cursor: pointer;
-  }
-
-  button:hover {
-    color: #ff4da6;
-  }
-
-  .progress-bar {
-    width: 80%;
-    margin: 10px 0;
-  }
-
-  .volume {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .volume input {
-    width: 100px;
-  }
-
-  .now-playing {
-    font-size: 14px;
-    color: #ff4da6;
-    margin-top: 5px;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spixyfy - Music Player</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-
-<div class="banner">🎧 Get Spitify Premium for ₹5 only!</div>
-
-<header>
-  <h1>Spitify</h1>
-</header>
-
-<section class="song-list">
-  <div class="song" onclick="playSong('song1.mp3', 'Blinding Lights')">
-    <img src="https://i.imgur.com/8RKXAIV.jpg" alt="Song 1">
-    <h3>Blinding Lights</h3>
-    <p>The Weeknd</p>
+<body class="bg-pink-100 text-gray-900 font-sans">
+  <!-- 5s Premium Banner -->
+  <div id="banner" class="bg-pink-600 text-white text-center p-2 fixed top-0 left-0 w-full z-50">
+    🎧 Get 5Rs Premium! Unlock ad-free music experience!
   </div>
-  <div class="song" onclick="playSong('song2.mp3', 'Levitating')">
-    <img src="https://i.imgur.com/WKqk6hE.jpg" alt="Song 2">
-    <h3>Levitating</h3>
-    <p>Dua Lipa</p>
+
+  <!-- Navbar -->
+  <nav class="bg-pink-700 p-4 flex justify-between items-center text-white mt-8">
+    <h1 class="text-2xl font-bold">Spixyfy</h1>
+    <div>
+      <input type="range" id="volume" min="0" max="100" value="50" />
+      <span id="volumeLabel">50%</span>
+    </div>
+  </nav>
+
+  <!-- Song List -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-6 p-6" id="songList"></div>
+
+  <!-- Player -->
+  <div class="fixed bottom-0 left-0 w-full bg-pink-600 text-white p-4 flex justify-between items-center">
+    <span id="currentSong">Select a song to play</span>
+    <audio id="player" controls class="ml-4"></audio>
   </div>
-  <div class="song" onclick="playSong('song3.mp3', 'Shape of You')">
-    <img src="https://i.imgur.com/RB8OaYt.jpg" alt="Song 3">
-    <h3>Shape of You</h3>
-    <p>Ed Sheeran</p>
-  </div>
-  <div class="song" onclick="playSong('song4.mp3', 'Stay')">
-    <img src="https://i.imgur.com/UGR2ZbT.jpg" alt="Song 4">
-    <h3>Stay</h3>
-    <p>Justin Bieber</p>
-  </div>
-  <div class="song" onclick="playSong('song5.mp3', 'Heat Waves')">
-    <img src="https://i.imgur.com/DWwVZxZ.jpg" alt="Song 5">
-    <h3>Heat Waves</h3>
-    <p>Glass Animals</p>
-  </div>
-  <div class="song" onclick="playSong('song6.mp3', 'Peaches')">
-    <img src="https://i.imgur.com/qzNjkBR.jpg" alt="Song 6">
-    <h3>Peaches</h3>
-    <p>Justin Bieber</p>
-  </div>
-  <div class="song" onclick="playSong('song7.mp3', 'Believer')">
-    <img src="https://i.imgur.com/qYFZ7eS.jpg" alt="Song 7">
-    <h3>Believer</h3>
-    <p>Imagine Dragons</p>
-  </div>
-  <div class="song" onclick="playSong('song8.mp3', 'Senorita')">
-    <img src="https://i.imgur.com/2rq2sJk.jpg" alt="Song 8">
-    <h3>Señorita</h3>
-    <p>Shawn Mendes</p>
-  </div>
-</section>
 
-<div class="player">
-  <div class="now-playing" id="nowPlaying">Now Playing: None</div>
-  <div class="controls">
-    <button onclick="prevSong()">⏮️</button>
-    <button onclick="togglePlay()">▶️ / ⏸️</button>
-    <button onclick="nextSong()">⏭️</button>
-  </div>
-  <input type="range" class="progress-bar" id="progress" value="0" />
-  <div class="volume">
-    <label>🔊</label>
-    <input type="range" id="volume" min="0" max="100" value="50" />
-    <span id="volumeValue">50%</span>
-  </div>
-</div>
+  <script>
+    // Hide banner after 5 seconds
+    setTimeout(() => {
+      document.getElementById('banner').style.display = 'none';
+    }, 5000);
 
-<audio id="audio"></audio>
+    // Song list
+    const songs = [
+      {
+        title: "Dreams",
+        artist: "Bensound",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+        img: "https://picsum.photos/200?random=1"
+      },
+      {
+        title: "Energy",
+        artist: "Bensound",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+        img: "https://picsum.photos/200?random=2"
+      },
+      {
+        title: "Relax",
+        artist: "Bensound",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+        img: "https://picsum.photos/200?random=3"
+      },
+      {
+        title: "Adventure",
+        artist: "Bensound",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+        img: "https://picsum.photos/200?random=4"
+      },
+      {
+        title: "Freedom",
+        artist: "Bensound",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
+        img: "https://picsum.photos/200?random=5"
+      },
+      {
+        title: "Calm Waves",
+        artist: "Bensound",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3",
+        img: "https://picsum.photos/200?random=6"
+      },
+      {
+        title: "Happy Tune",
+        artist: "Bensound",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3",
+        img: "https://picsum.photos/200?random=7"
+      },
+      {
+        title: "Journey",
+        artist: "Bensound",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
+        img: "https://picsum.photos/200?random=8"
+      }
+    ];
 
-<script>
-  const audio = document.getElementById('audio');
-  const progress = document.getElementById('progress');
-  const volume = document.getElementById('volume');
-  const volumeValue = document.getElementById('volumeValue');
-  const nowPlaying = document.getElementById('nowPlaying');
+    const listContainer = document.getElementById("songList");
+    const player = document.getElementById("player");
+    const currentSong = document.getElementById("currentSong");
+    const volume = document.getElementById("volume");
+    const volumeLabel = document.getElementById("volumeLabel");
 
-  const songs = [
-    { name: 'Blinding Lights', file: 'song1.mp3' },
-    { name: 'Levitating', file: 'song2.mp3' },
-    { name: 'Shape of You', file: 'song3.mp3' },
-    { name: 'Stay', file: 'song4.mp3' },
-    { name: 'Heat Waves', file: 'song5.mp3' },
-    { name: 'Peaches', file: 'song6.mp3' },
-    { name: 'Believer', file: 'song7.mp3' },
-    { name: 'Señorita', file: 'song8.mp3' },
-  ];
+    songs.forEach((song, index) => {
+      const div = document.createElement("div");
+      div.className = "bg-white p-3 rounded-lg shadow hover:bg-pink-200 cursor-pointer";
+      div.innerHTML = `
+        <img src="${song.img}" alt="${song.title}" class="rounded-lg mb-2">
+        <h2 class="font-semibold">${song.title}</h2>
+        <p class="text-sm text-gray-500">${song.artist}</p>
+      `;
+      div.onclick = () => {
+        player.src = song.src;
+        player.play();
+        currentSong.textContent = "🎶 Now Playing: " + song.title + " - " + song.artist;
+      };
+      listContainer.appendChild(div);
+    });
 
-  let currentSongIndex = 0;
-
-  function playSong(file, name) {
-    audio.src = file;
-    audio.play();
-    nowPlaying.textContent = "Now Playing: " + name;
-    currentSongIndex = songs.findIndex(song => song.file === file);
-  }
-
-  function togglePlay() {
-    if (audio.paused) {
-      audio.play();
-    } else {
-      audio.pause();
-    }
-  }
-
-  function nextSong() {
-    currentSongIndex = (currentSongIndex + 1) % songs.length;
-    const song = songs[currentSongIndex];
-    playSong(song.file, song.name);
-  }
-
-  function prevSong() {
-    currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
-    const song = songs[currentSongIndex];
-    playSong(song.file, song.name);
-  }
-
-  volume.addEventListener('input', () => {
-    audio.volume = volume.value / 100;
-    volumeValue.textContent = volume.value + "%";
-  });
-
-  audio.addEventListener('timeupdate', () => {
-    progress.value = (audio.currentTime / audio.duration) * 100 || 0;
-  });
-
-  progress.addEventListener('input', () => {
-    audio.currentTime = (progress.value / 100) * audio.duration;
-  });
-</script>
+    volume.addEventListener("input", () => {
+      player.volume = volume.value / 100;
+      volumeLabel.textContent = volume.value + "%";
+    });
+  </script>
 </body>
 </html>
-
