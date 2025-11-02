@@ -1,119 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Spixyfy - Music Player</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spixyfy Music</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #000;
+      color: #fff;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background-color: #111;
+    }
+
+    header h1 {
+      color: #ff007f;
+      font-size: 24px;
+      margin: 0;
+    }
+
+    .premium-banner {
+      background-color: #ff007f;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      font-weight: bold;
+      display: none;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .song {
+      background-color: #1a1a1a;
+      border-radius: 12px;
+      text-align: center;
+      padding: 15px;
+      box-shadow: 0 4px 8px rgba(255, 0, 127, 0.3);
+    }
+
+    .song img {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .song h3 {
+      margin: 10px 0 5px;
+      color: #ff66b2;
+    }
+
+    .player {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px;
+    }
+
+    .controls button {
+      background: #ff007f;
+      border: none;
+      color: white;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .volume input {
+      width: 100px;
+    }
+
+    .volume span {
+      margin-left: 10px;
+    }
+  </style>
 </head>
-<body class="bg-pink-100 text-gray-900 font-sans">
-  <!-- 5s Premium Banner -->
-  <div id="banner" class="bg-pink-600 text-white text-center p-2 fixed top-0 left-0 w-full z-50">
-    🎧 Get 5Rs Premium! Unlock ad-free music experience!
+<body>
+  <div class="premium-banner" id="premiumBanner">💖 Get Spixyfy Premium for just ₹5! Offer ends soon! 💖</div>
+  <header>
+    <h1>Spixyfy</h1>
+  </header>
+
+  <div class="container">
+    <div class="song"><img src="https://i.ibb.co/gjzJdrL/letmeloveyou.jpg" alt="Let Me Love You"><h3>Let Me Love You</h3></div>
+    <div class="song"><img src="https://i.ibb.co/y0LxjZ3/friends.jpg" alt="Friends"><h3>Friends</h3></div>
+    <div class="song"><img src="https://i.ibb.co/3WzQMLW/judas.jpg" alt="Judas"><h3>Judas</h3></div>
+    <div class="song"><img src="https://i.ibb.co/nRz0znf/pokerface.jpg" alt="Poker Face"><h3>Poker Face</h3></div>
+    <div class="song"><img src="https://i.ibb.co/wCpNpvb/blindinglights.jpg" alt="Blinding Lights"><h3>Blinding Lights</h3></div>
+    <div class="song"><img src="https://i.ibb.co/xmRLc4n/shapeofyou.jpg" alt="Shape of You"><h3>Shape of You</h3></div>
+    <div class="song"><img src="https://i.ibb.co/YfYdH3Y/stay.jpg" alt="Stay"><h3>Stay</h3></div>
+    <div class="song"><img src="https://i.ibb.co/9tgYVQ1/levitating.jpg" alt="Levitating"><h3>Levitating</h3></div>
   </div>
 
-  <!-- Navbar -->
-  <nav class="bg-pink-700 p-4 flex justify-between items-center text-white mt-8">
-    <h1 class="text-2xl font-bold">Spixyfy</h1>
-    <div>
-      <input type="range" id="volume" min="0" max="100" value="50" />
-      <span id="volumeLabel">50%</span>
+  <div class="player">
+    <div class="now-playing">🎵 Now Playing: <span id="currentSong">Let Me Love You</span></div>
+    <div class="controls">
+      <button onclick="prevSong()">⏮</button>
+      <button onclick="togglePlay()">▶️</button>
+      <button onclick="nextSong()">⏭</button>
     </div>
-  </nav>
-
-  <!-- Song List -->
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-6 p-6" id="songList"></div>
-
-  <!-- Player -->
-  <div class="fixed bottom-0 left-0 w-full bg-pink-600 text-white p-4 flex justify-between items-center">
-    <span id="currentSong">Select a song to play</span>
-    <audio id="player" controls class="ml-4"></audio>
+    <div class="volume">
+      🔊 <input type="range" id="volume" min="0" max="100" value="50" onchange="updateVolume()"> <span id="volValue">50</span>
+    </div>
   </div>
 
   <script>
-    // Hide banner after 5 seconds
+    const banner = document.getElementById('premiumBanner');
+    banner.style.display = 'block';
     setTimeout(() => {
-      document.getElementById('banner').style.display = 'none';
+      banner.style.display = 'none';
     }, 5000);
 
-    // Song list
+    // Free public domain MP3 sources
     const songs = [
-      {
-        title: "Dreams",
-        artist: "Bensound",
-        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-        img: "https://picsum.photos/200?random=1"
-      },
-      {
-        title: "Energy",
-        artist: "Bensound",
-        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-        img: "https://picsum.photos/200?random=2"
-      },
-      {
-        title: "Relax",
-        artist: "Bensound",
-        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
-        img: "https://picsum.photos/200?random=3"
-      },
-      {
-        title: "Adventure",
-        artist: "Bensound",
-        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
-        img: "https://picsum.photos/200?random=4"
-      },
-      {
-        title: "Freedom",
-        artist: "Bensound",
-        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
-        img: "https://picsum.photos/200?random=5"
-      },
-      {
-        title: "Calm Waves",
-        artist: "Bensound",
-        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3",
-        img: "https://picsum.photos/200?random=6"
-      },
-      {
-        title: "Happy Tune",
-        artist: "Bensound",
-        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3",
-        img: "https://picsum.photos/200?random=7"
-      },
-      {
-        title: "Journey",
-        artist: "Bensound",
-        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
-        img: "https://picsum.photos/200?random=8"
-      }
+      { title: 'Let Me Love You', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Kevin_MacLeod/Jazz_Sampler/Kevin_MacLeod_-_01_-_Take_the_Lead.mp3' },
+      { title: 'Friends', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Scott_Holmes_Music/Happy_Music/Scott_Holmes_Music_-_01_-_Happy_Ukulele.mp3' },
+      { title: 'Judas', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Silence_Is_Sexy/Silence_Is_Sexy_-_Live_in_Berlin/Silence_Is_Sexy_-_02_-_Holiday.mp3' },
+      { title: 'Poker Face', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Mid-Air_Machine/So_We_Go/Mid-Air_Machine_-_04_-_Blue_Skies.mp3' },
+      { title: 'Blinding Lights', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Jahzzar/HiFi_City/Jahzzar_-_01_-_Siesta.mp3' },
+      { title: 'Shape of You', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Komiku/It_is_time_for_adventure/Komiku_-_07_-_Battle_of_Pogs.mp3' },
+      { title: 'Stay', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Komiku/Poupis_theme/Komiku_-_06_-_Poupis_Theme.mp3' },
+      { title: 'Levitating', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Komiku/Quest_of_the_dreams/Komiku_-_01_-_Friends.mp3' }
     ];
 
-    const listContainer = document.getElementById("songList");
-    const player = document.getElementById("player");
-    const currentSong = document.getElementById("currentSong");
-    const volume = document.getElementById("volume");
-    const volumeLabel = document.getElementById("volumeLabel");
+    let current = 0;
+    const audio = new Audio(songs[current].src);
 
-    songs.forEach((song, index) => {
-      const div = document.createElement("div");
-      div.className = "bg-white p-3 rounded-lg shadow hover:bg-pink-200 cursor-pointer";
-      div.innerHTML = `
-        <img src="${song.img}" alt="${song.title}" class="rounded-lg mb-2">
-        <h2 class="font-semibold">${song.title}</h2>
-        <p class="text-sm text-gray-500">${song.artist}</p>
-      `;
-      div.onclick = () => {
-        player.src = song.src;
-        player.play();
-        currentSong.textContent = "🎶 Now Playing: " + song.title + " - " + song.artist;
-      };
-      listContainer.appendChild(div);
-    });
+    function togglePlay() {
+      if (audio.paused) {
+        audio.play();
+        document.getElementById('currentSong').textContent = songs[current].title;
+      } else {
+        audio.pause();
+      }
+    }
 
-    volume.addEventListener("input", () => {
-      player.volume = volume.value / 100;
-      volumeLabel.textContent = volume.value + "%";
-    });
+    function nextSong() {
+      current = (current + 1) % songs.length;
+      audio.src = songs[current].src;
+      audio.play();
+      document.getElementById('currentSong').textContent = songs[current].title;
+    }
+
+    function prevSong() {
+      current = (current - 1 + songs.length) % songs.length;
+      audio.src = songs[current].src;
+      audio.play();
+      document.getElementById('currentSong').textContent = songs[current].title;
+    }
+
+    function updateVolume() {
+      const volume = document.getElementById('volume').value;
+      audio.volume = volume / 100;
+      document.getElementById('volValue').textContent = volume;
+    }
   </script>
 </body>
 </html>
